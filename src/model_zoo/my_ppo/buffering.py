@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import *
+from typing import Union, Optional, Sequence
 
 from tqdm.asyncio import tqdm_asyncio
 from tqdm.auto import tqdm
@@ -8,10 +8,9 @@ from torch import Tensor
 import torch
 from torch_discounted_cumsum import discounted_cumsum_right
 
-from src.model_zoo.ppo_spinup.actor_critic_models.base import ActorCritic
+from src.model_zoo.my_ppo.actor_critic_models.base import ActorCritic
 from src.batched_env.env_wrapper import BatchedEnvWrapper
-
-from model_zoo.my_ppo.metrics import EpochMetricsAggregator
+from src.model_zoo.my_ppo.metrics import EpochMetricsAggregator
 
 
 @dataclass

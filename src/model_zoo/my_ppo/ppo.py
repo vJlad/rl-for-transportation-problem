@@ -7,7 +7,7 @@ import logging
 from tqdm.auto import tqdm
 from typing import Callable
 
-from model_zoo.my_ppo.metrics import EpochMetricsAggregator, FullAggregator
+from src.model_zoo.my_ppo.metrics import EpochMetricsAggregator, FullAggregator
 from src.batched_env.env_wrapper import BatchedEnvWrapper
 from src.model_zoo.my_ppo.buffering import ReplayBuffer
 from src.model_zoo.my_ppo.actor_critic_models.base import ActorCriticFabric
@@ -122,7 +122,6 @@ def ppo(
             for i in range(train_pi_iters):
                 pi_optimizer.zero_grad()
                 loss_pi, pi_info = compute_loss_pi(data)
-                # kl = mpi_avg(pi_info['kl'])
                 kl = pi_info['kl']
                 log_mem[i].update(dict(
                     LossPi=loss_pi.item(),
@@ -140,7 +139,6 @@ def ppo(
                                   f'({kl=}, {target_kl=}, {kl / target_kl=})')
                     break
                 loss_pi.backward()
-                # mpi_avg_grads(ac.pi)  # average grads across MPI processes
                 pi_optimizer.step()
                 tqdm_train_pi.update()
 
@@ -153,7 +151,6 @@ def ppo(
                 vf_optimizer.zero_grad()
                 loss_v = compute_loss_v(data)
                 loss_v.backward()
-                # mpi_avg_grads(ac.v)  # average grads across MPI processes
                 vf_optimizer.step()
                 log_mem[i].update(dict(
                     LossV=loss_v.item(),
@@ -161,7 +158,7 @@ def ppo(
                 tqdm_train_v.update()
 
         # @torch.no_grad()
-        # def greedy_validation():
+        # def greedy_validation(): # TODO
         #     o = batched_env.reset()
         #     r_mem = []
         #     num_actions = batched_env.supplier_network.number_of_actions()
