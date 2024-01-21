@@ -90,7 +90,7 @@ def ppo(
     pi_optimizer = Adam(ac.pi.parameters(), lr=pi_lr)
     vf_optimizer = Adam(ac.v.parameters(), lr=vf_lr)
 
-    # Wandb logger config # TODO: rewrite logger
+    # Wandb logger config # TODO: rewrite logger to custom class
     config = dict(
         seed=seed,
         steps_per_epoch=steps_per_epoch,

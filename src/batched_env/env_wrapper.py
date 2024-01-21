@@ -21,7 +21,7 @@ class DefaultStrategy(BatchedDStrategy):
         return torch.ones_like(env.base_layers[0].b[..., 0, 0, 0])
 
 
-class MaxDStrategy(BatchedDStrategy):  # TODO
+class MaxDStrategy(BatchedDStrategy):
     def __call__(self, env: BatchedSupplierNetwork, action: Tensor) -> Tensor:
         instance_ids = env.decode_action(action)
         maxd_by_layers = torch.stack([
